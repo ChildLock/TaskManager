@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- スタイル -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Reactのマウント先 -->
+  <div id="root"></div>
+
+  <!-- React本体（CDN）-->
+  <!-- ※本番環境では Vite などのビルドツールに切り替える -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!--
+    JSファイルの読み込み順（依存関係の順番を守ること）
+    constants → 各コンポーネント → App の順に読み込む
+    各コンポーネントは constants.js の定数に依存しているため、
+    constants.js を必ず先頭に置く
+  -->
+  <script type="text/babel" src="js/constants.js"></script>
+  <script type="text/babel" src="js/Sidebar.js"></script>
+  <script type="text/babel" src="js/TopBar.js"></script>
+  <script type="text/babel" src="js/FilterBar.js"></script>
+  <script type="text/babel" src="js/StatsRow.js"></script>
+  <script type="text/babel" src="js/TaskCard.js"></script>
+  <script type="text/babel" src="js/TaskList.js"></script>
+  <script type="text/babel" src="js/TaskModal.js"></script>
+  <script type="text/babel" src="js/App.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+
+/* ============================================================
+   デザイントークン（CSS カスタムプロパティ）
+   色・角丸・フォントをここで一元管理する。
+   変更したい場合はこのブロックの値を書き換えるだけでOK。
+============================================================ */
+:root {
+  /* 背景レイヤー（暗い順）*/
+  --bg:       #0f0f0f; /* ページ最背面 */
+  --surface:  #181818; /* カード・サイドバー */
+  --surface2: #222222; /* ホバー・入力欄背景 */
+
+  /* ボーダー */
+  --border:  rgba(255,255,255,0.08); /* 通常の区切り線 */
+  --border2: rgba(255,255,255,0.15); /* 強調ボーダー */
+
+  /* テキスト */
+  --text:  #f0ede8; /* メインテキスト */
+  --muted: #888580; /* サブテキスト */
+  --hint:  #555250; /* ヒント・ラベル */
+
+  /* アクセントカラー（黄緑）*/
+  --accent:      #d4f064;                /* アクセント本体 */
+  --accent-dim:  rgba(212,240,100,0.12); /* アクセント背景（薄め）*/
+  --accent-text: #0f0f0f;               /* アクセント上のテキスト色 */
+
+  /* ステータス・優先度カラー */
+  --red:       #ff5c5c;               /* 高優先度・期限切れ */
+  --red-dim:   rgba(255,92,92,0.12);
+  --amber:     #f5a623;               /* 中優先度・進行中 */
+  --amber-dim: rgba(245,166,35,0.12);
+  --blue:      #5b9cf6;               /* 未着手 */
+  --blue-dim:  rgba(91,156,246,0.12);
+  --teal:      #3ecfaa;               /* 完了 */
+  --teal-dim:  rgba(62,207,170,0.12);
+
+  /* 角丸 */
+  --r:    10px; /* カード */
+  --r-sm:  6px; /* ボタン・入力欄 */
+
+  /* フォント */
+  --font: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace; /* 数値表示に使用 */
+}
+
+/* ブラウザデフォルトの margin/padding をリセット */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased; /* macOS でフォントを滑らかに */
+}
+
+/* ============================================================
+   レイアウト: サイドバー（固定幅）+ メイン（残り幅）の2カラム
+============================================================ */
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── サイドバー ── */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;           /* 幅が縮まらないように固定 */
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+}
+
+/* ロゴエリア */
+.logo { padding: 0 20px 24px; display: flex; align-items: center; gap: 10px; }
+.logo-mark {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 14px; height: 14px; }
+.logo-name { font-size: 15px; font-weight: 500; letter-spacing: -0.3px; color: var(--text); }
+
+/* ナビゲーション */
+.nav-section { padding: 0 12px; margin-bottom: 8px; }
+.nav-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--hint); padding: 0 8px 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 8px; border-radius: var(--r-sm);
+  cursor: pointer; color: var(--muted);
+  font-size: 13px; font-weight: 400;
+  transition: background 0.15s, color 0.15s;
+  user-select: none; /* テキスト選択を無効化 */
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+/* アクティブなナビはアクセントカラーで強調 */
+.nav-item.active { background: var(--accent-dim); color: var(--accent); }
+/* 件数バッジ: margin-left:auto で右端に寄せる */
+.nav-item .count {
+  margin-left: auto;
+  font-size: 11px; font-family: var(--mono);
+  color: var(--hint); background: var(--surface2);
+  padding: 1px 6px; border-radius: 99px; /* pill形状 */
+}
+.nav-item.active .count { background: var(--accent-dim); color: var(--accent); }
+/* ステータスを示す小さな色付きドット */
+.nav-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* サイドバー下部: ログインユーザー情報 */
+.sidebar-footer {
+  margin-top: auto; /* 残りスペースを全て使って最下部に押し込む */
+  padding: 16px 20px 0;
+  border-top: 1px solid var(--border);
+}
+.user-row { display: flex; align-items: center; gap: 10px; }
+/* アバター（イニシャル表示の円形アイコン）*/
+.avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent-dim); border: 1px solid rgba(212,240,100,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500; color: var(--accent); flex-shrink: 0;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.user-role { font-size: 11px; color: var(--hint); }
+
+/* ── メインエリア ── */
+.main {
+  flex: 1;
+  display: flex; flex-direction: column;
+  min-width: 0;    /* flexbox のオーバーフロー防止に必要 */
+  overflow: hidden;
+}
+
+/* トップバー: ページタイトル + 新規作成ボタン */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0; /* スクロールしても固定 */
+}
+.page-title { font-size: 18px; font-weight: 500; letter-spacing: -0.4px; }
+.page-title span { color: var(--muted); font-weight: 300; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+/* 共通ボタンスタイル */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: var(--r-sm);
+  font-family: var(--font); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s; border: none; outline: none;
+}
+/* ゴーストボタン: 透明背景・枠線あり */
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+/* プライマリボタン: アクセントカラー背景 */
+.btn-primary { background: var(--accent); color: var(--accent-text); }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ── 優先度フィルターバー ── */
+.filters {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 28px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto; /* 画面が狭い時は横スクロール */
+}
+/* pill 形状のフィルターボタン */
+.filter-pill {
+  padding: 4px 12px; border-radius: 99px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--muted); font-family: var(--font); font-size: 12px;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.filter-pill:hover { border-color: var(--border2); color: var(--text); }
+.filter-pill.active { background: var(--accent-dim); border-color: rgba(212,240,100,0.3); color: var(--accent); }
+/* フィルター間の縦線区切り */
+.filter-sep { width: 1px; height: 18px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+.sort-label { font-size: 12px; color: var(--hint); margin-left: auto; white-space: nowrap; }
+
+/* ── 統計サマリー行 ── */
+/*
+  gap:1px + background:ボーダー色 というテクニック:
+  セル間に 1px の細い線を入れるための方法。
+  grid の gap 部分が親の background 色で透けて見える。
+*/
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px; background: var(--border);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.stat-cell { background: var(--surface); padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+/* 数値は等幅フォント（DM Mono）で揃える */
+.stat-num { font-size: 22px; font-weight: 500; font-family: var(--mono); letter-spacing: -0.5px; }
+.stat-desc { font-size: 11px; color: var(--hint); line-height: 1.4; }
+
+/* ── タスク一覧エリア ── */
+.task-area {
+  flex: 1;
+  overflow-y: auto; /* タスクが増えたらスクロール */
+  padding: 16px 28px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+/* スクロールバーをカスタマイズして細くする */
+.task-area::-webkit-scrollbar { width: 4px; }
+.task-area::-webkit-scrollbar-track { background: transparent; }
+.task-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* タスクカード */
+.task-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+  cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  /* 追加時にフェードイン + スライドアップするアニメーション */
+  animation: slideIn 0.2s ease both;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.task-card:hover { border-color: var(--border2); background: var(--surface2); }
+/* 完了タスクは全体を薄くして存在感を下げる */
+.task-card.done { opacity: 0.45; }
+
+/* チェックボタン（完了トグル）*/
+.check-btn {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 1.5px solid var(--border2); background: transparent;
+  cursor: pointer; flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.check-btn:hover { border-color: var(--accent); }
+/* チェック済み: 緑の背景 */
+.check-btn.checked { background: var(--accent); border-color: var(--accent); }
+/* CSS だけでチェックマーク（✓）を描画するテクニック */
+.check-btn.checked::after {
+  content: '';
+  width: 10px; height: 6px;
+  border-left: 2px solid #0f0f0f;
+  border-bottom: 2px solid #0f0f0f;
+  transform: rotate(-45deg) translate(0px, -2px);
+  display: block;
+}
+
+.task-body { flex: 1; min-width: 0; }
+.task-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.task-title { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.4; }
+/* 完了タスクのタイトルに打ち消し線 */
+.task-card.done .task-title { text-decoration: line-through; color: var(--hint); }
+
+/* バッジ（ステータス・優先度表示）*/
+.badges { display: flex; gap: 5px; flex-shrink: 0; align-items: center; }
+.badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+/* ステータスバッジ */
+.badge-todo { background: var(--blue-dim);  color: var(--blue);  }
+.badge-wip  { background: var(--amber-dim); color: var(--amber); }
+.badge-done { background: var(--teal-dim);  color: var(--teal);  }
+/* 優先度バッジ */
+.badge-hi   { background: var(--red-dim);   color: var(--red);   }
+.badge-md   { background: var(--amber-dim); color: var(--amber); }
+.badge-lo   { background: var(--surface2);  color: var(--muted); }
+
+/* タグ・期限表示 */
+.task-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tag { font-size: 11px; padding: 1px 8px; border-radius: 99px; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+.due { font-size: 11px; font-family: var(--mono); color: var(--hint); }
+.due.overdue { color: var(--red); } /* 期限切れは赤で警告 */
+
+/* ============================================================
+   モーダル: 新規タスク作成フォーム
+============================================================ */
+/* 背景のオーバーレイ（画面全体を暗くする）*/
+.modal-overlay {
+  position: fixed; inset: 0; /* top/right/bottom/left: 0 の一括指定 */
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; padding: 20px;
+  backdrop-filter: blur(2px); /* 背景をぼかす */
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* モーダル本体 */
+.modal {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 14px; padding: 28px;
+  width: 100%; max-width: 460px;
+  /* cubic-bezier(0.34,1.56,...) でバネのような出現アニメーション */
+  animation: modalIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+.modal-title { font-size: 16px; font-weight: 500; margin-bottom: 20px; }
+
+/* フォームフィールド共通 */
+.field { margin-bottom: 16px; }
+.field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.field input, .field textarea, .field select {
+  width: 100%; background: var(--bg);
+  border: 1px solid var(--border2); border-radius: var(--r-sm);
+  padding: 8px 12px; font-family: var(--font);
+  font-size: 13px; color: var(--text);
+  outline: none; transition: border-color 0.15s;
+  appearance: none; /* ブラウザデフォルトのスタイルをリセット */
+}
+/* フォーカス時にアクセントカラーのボーダーを表示 */
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); }
+.field textarea { resize: vertical; min-height: 70px; }
+/* 2カラムレイアウト（優先度 + 期限を横並びに）*/
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 24px; }
+
+/* タスクが0件の時の空状態表示 */
+.empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--hint); gap: 8px; padding: 40px; }
+.empty-icon { font-size: 32px; opacity: 0.4; }
+.empty-text { font-size: 14px; }
+
+select option { background: var(--surface2); }
+
