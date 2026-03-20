@@ -1,15 +1,16 @@
 // ============================================================
 // TaskList.js
 // 役割: フィルター済みのタスク配列を受け取り、TaskCard を並べて表示する
-//       タスクが0件の場合は空状態メッセージを表示する
 //
 // props:
-//   tasks    - 表示するタスクの配列（App でフィルター済みのもの）
-//   onToggle - 完了トグルのコールバック。TaskCard に渡す (id: number) => void
+//   tasks       - 表示するタスクの配列
+//   onForward   - 通常前進 (id) => void
+//   onBack      - 差戻し依頼 (id) => void
+//   onEmergency - 緊急完了依頼 (id) => void
+//   onDelete    - 削除トグル (id) => void
 // ============================================================
-function TaskList({ tasks, onToggle }) {
+function TaskList({ tasks, onForward, onBack, onEmergency, onDelete }) {
 
-  // タスクが0件の場合は空状態を表示
   if (tasks.length === 0) {
     return (
       <div className="task-area">
@@ -23,16 +24,19 @@ function TaskList({ tasks, onToggle }) {
 
   return (
     <div className="task-area">
-      {tasks.map((task, i) => (
-        // TaskCard に task・index・onToggle を渡す
-        // key には task.id を使い、Reactが差分更新できるようにする
-        <TaskCard
-          key={task.id}
-          task={task}
-          index={i}
-          onToggle={onToggle}
-        />
-      ))}
+      {tasks.map(function(task, i) {
+        return (
+          <TaskCard
+            key={task.id}
+            task={task}
+            index={i}
+            onForward={onForward}
+            onBack={onBack}
+            onEmergency={onEmergency}
+            onDelete={onDelete}
+          />
+        );
+      })}
     </div>
   );
 }
