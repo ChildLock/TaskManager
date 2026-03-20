@@ -22,7 +22,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync . s3://taskflow-childlock-2026
+          aws s3 sync . s3://taskflow-childlock-2026 \
             --exclude ".git/*" \
             --exclude ".github/*" \
             --delete
