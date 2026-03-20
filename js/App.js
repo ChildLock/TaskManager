@@ -51,16 +51,19 @@ function App() {
   // ──────────────────────────────────────────
 
   /**
-   * タスクの完了/未完了をトグルする
-   * done フラグと status を連動して更新する
+   * タスクのステータスを順番に進める
+   * todo → wip → done → todo ... とサイクルする
+   * done になった時は done フラグも true にする
    * 実際のアプリでは: PATCH /api/tasks/:id/status
    */
   function handleToggle(id) {
-    setTasks(prev => prev.map(t =>
-      t.id === id
-        ? { ...t, done: !t.done, status: !t.done ? 'done' : 'todo' }
-        : t
-    ));
+    // ステータスの順番を定義
+    const CYCLE = { todo: 'wip', wip: 'done', done: 'todo' };
+    setTasks(prev => prev.map(t => {
+      if (t.id !== id) return t;
+      const nextStatus = CYCLE[t.status];
+      return { ...t, status: nextStatus, done: nextStatus === 'done' };
+    }));
   }
 
   /**

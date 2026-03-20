@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TaskFlow</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts: DM Sans（本文）+ DM Mono（数値表示）-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- スタイル -->
+  <!-- デザイン -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,19 +24,26 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <!--
-    JSファイルの読み込み順（依存関係の順番を守ること）
-    constants → 各コンポーネント → App の順に読み込む
-    各コンポーネントは constants.js の定数に依存しているため、
-    constants.js を必ず先頭に置く
+    読み込み順のルール（依存関係の順番を守ること）
+
+    1. constants.js  → 全ファイルが参照する定数を最初に読む
+    2. components/*  → 各UIパーツ（constants に依存）
+    3. App.js        → 全コンポーネントを組み立てマウント（最後に読む）
   -->
+
+  <!-- 定数・初期データ -->
   <script type="text/babel" src="js/constants.js"></script>
-  <script type="text/babel" src="js/Sidebar.js"></script>
-  <script type="text/babel" src="js/TopBar.js"></script>
-  <script type="text/babel" src="js/FilterBar.js"></script>
-  <script type="text/babel" src="js/StatsRow.js"></script>
-  <script type="text/babel" src="js/TaskCard.js"></script>
-  <script type="text/babel" src="js/TaskList.js"></script>
-  <script type="text/babel" src="js/TaskModal.js"></script>
+
+  <!-- UIコンポーネント -->
+  <script type="text/babel" src="js/components/Sidebar.js"></script>
+  <script type="text/babel" src="js/components/TopBar.js"></script>
+  <script type="text/babel" src="js/components/FilterBar.js"></script>
+  <script type="text/babel" src="js/components/StatsRow.js"></script>
+  <script type="text/babel" src="js/components/TaskCard.js"></script>
+  <script type="text/babel" src="js/components/TaskList.js"></script>
+  <script type="text/babel" src="js/components/TaskModal.js"></script>
+
+  <!-- 状態管理・マウント（必ず最後）-->
   <script type="text/babel" src="js/App.js"></script>
 
 </body>
